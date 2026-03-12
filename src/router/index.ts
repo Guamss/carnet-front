@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [],
+  routes : [
+    { path: '/', component: () => import('@/views/HomeView.vue') },
+    { path: '/login', component: () => import('@/views/AuthView.vue') },
+    { path: '/404', component: () => import('@/views/404View.vue') },
+  ],
 })
 
 export default router
