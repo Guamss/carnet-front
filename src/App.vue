@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import NavBar from '@/components/navBar.vue'
+import NavBar from '@/components/NavBar.vue'
 </script>
 
 <template>
-  <h1>Le Véritable Carnet</h1>
   <NavBar/>
   <main>
     <RouterView />
