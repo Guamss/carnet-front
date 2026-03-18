@@ -100,3 +100,11 @@ input {
     border-color: var(--color-accent);
   }
 }
+
+dialog {
+  background-color: var(--obsidian-700);
+  border: 1px solid var(--color-accent);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  min-width: 600px;
+}
