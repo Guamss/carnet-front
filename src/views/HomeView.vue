@@ -20,15 +20,32 @@ const closeDialog = () => {
   </dialog>
   <div>
     <button @click="showDialog">+ Crée un Carnet</button>
-  <form>
-    <label>Filtrer par nom :</label>
-    <label>Filtrer par tags :</label>
-    <input type="text" placeholder="abc.." required />
-  </form>
+    <div>
+      <label
+        >Filtrer par nom :
+        <input type="text" id="quote" placeholder="abc.." />
+      </label>
+      <label
+        >Filtrer par tags :
+        <input type="text" id="labels" />
+      </label>
+    </div>
   </div>
   <section>
-  <!-- TODO Boite -->
+    <!-- TODO Boite -->
   </section>
 </template>
+<style scoped>
+main {
 
-<style scoped></style>
+  > div {
+    display: flex;
+    flex-direction: column;
+
+    > div {
+      display: flex;
+      gap:1.5rem;
+    }
+  }
+}
+</style>

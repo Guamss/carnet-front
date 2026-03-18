@@ -8,11 +8,11 @@ const { login } = useAuth()
 
 async function handleLogin() {
   try {
-    await login ({
+    await login({
       username: username.value,
-      password: password.value
+      password: password.value,
     })
-  } catch(error){
+  } catch (error) {
     console.log(error)
   }
 }
@@ -21,13 +21,19 @@ async function handleLogin() {
 <template>
   <form @submit.prevent="handleLogin">
     <p>Connexion</p>
-    <label>Nom d'utilisateur</label>
-    <input v-model="username" placeholder="Yves" type="text" required />
-    <!-- <ul>
+    <div>
+      <div>
+        <label for="username">Nom d'utilisateur</label>
+        <input v-model="username" id="username" placeholder="Yves" type="text" required />
+      </div>
+      <!-- <ul>
       <li style="color: red">{{}}</li>
     </ul> -->
-    <label>Mot de passe</label>
-    <input v-model="password" placeholder="*******" type="password" required />
+      <div>
+        <label for="password">Mot de passe</label>
+        <input v-model="password" id="password" placeholder="*******" type="password" required />
+      </div>
+    </div>
     <!-- <ul>
       <li style="color: red">{{}}</li>
     </ul> -->
@@ -36,24 +42,39 @@ async function handleLogin() {
 </template>
 
 <style scoped>
-form {
-  max-width: 600px;
-  background-color: var(--color-bg-secondary);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 30px 50px;
-  gap: 0.5rem;
+main {
+  > form {
+    max-width: 600px;
+    background-color: var(--color-bg-secondary);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px 50px;
+    gap: 0.5rem;
 
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-  border: 1px solid var(--color-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
 
-  > p {
-    font-size: 26px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
+      > div {
+        margin: 10px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+
+        > div {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+      }
+      > p {
+        font-size: 26px;
+        font-weight: bold;
+        text-align: center;
+        margin: 1rem 0;
+      }
+    }
 }
 </style>
