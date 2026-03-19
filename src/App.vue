@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NavBar from '@/components/NavBar.vue'
+import 'vue-toast-notification/dist/theme-sugar.css';
 </script>
 
 <template>

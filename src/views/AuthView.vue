@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAuth } from '@/composables/useAuth.ts'
+import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toast-notification';
 
+const toast = useToast()
+const router = useRouter()
 const username = ref('')
 const password = ref('')
 const { login } = useAuth()
@@ -12,6 +16,15 @@ async function handleLogin() {
       username: username.value,
       password: password.value,
     })
+
+    // JSP pourquoi ça duplique le toast
+
+    toast.success("Connecté avec succès !", {
+      position: "top-right"
+    });
+
+    router.push("/");
+
   } catch (error) {
     console.log(error)
   }
