@@ -1,3 +1,4 @@
+import type { User } from '@/models/user'
 import axios from 'axios'
 
 const api = axios.create({
@@ -10,10 +11,14 @@ export const authService = {
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     })
   },
-  getUserProfile(token : string) {
+  getUserProfile(token : string): Promise<User> {
     return api.get('/users/me', {
       headers: {'Authorization': `Bearer ${token}` }
-    })
+    }).then((res) => {
+      return res.data as User
+  }).catch((error) => {
+    throw error
+  })
   },
 }
 
