@@ -2,7 +2,6 @@ import { computed, ref } from 'vue'
 import { authService } from '../api/axios.ts'
 
 const token = ref(localStorage.getItem('token'))
-//TODO : Do the isAuthenticated system, and remove all the console.log
 
 export function useAuth() {
   async function login(credentials: object) {
@@ -11,7 +10,6 @@ export function useAuth() {
       const accessToken = response.data.access_token
       token.value = accessToken
       localStorage.setItem('token', accessToken)
-      console.log('Connexion reussi', accessToken)
       return response
     } catch (error) {
       logout()
@@ -25,6 +23,7 @@ export function useAuth() {
   }
 
   function isValid(token: string | null) {
+    //todo verifier si le token est valide
     return true
   }
 

@@ -2,9 +2,8 @@
 import { ref } from 'vue'
 import { useAuth } from '@/composables/useAuth.ts'
 import { useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification';
+import { sendToast } from '@/composables/utils.ts'
 
-const toast = useToast()
 const router = useRouter()
 const username = ref('')
 const password = ref('')
@@ -16,17 +15,11 @@ async function handleLogin() {
       username: username.value,
       password: password.value,
     })
-
-    // JSP pourquoi ça duplique le toast
-
-    toast.success("Connecté avec succès !", {
-      position: "top-right"
-    });
-
-    router.push("/");
-
-  } catch (error) {
-    console.log(error)
+    sendToast('Connecté avec succès !', 'success')
+    router.push('/')
+  } catch {
+    // handle mieux l'erreur avec AxiosError
+    sendToast("Erreur d'authentification", 'error')
   }
 }
 </script>
@@ -50,7 +43,7 @@ async function handleLogin() {
     <!-- <ul>
       <li style="color: red">{{}}</li>
     </ul> -->
-    <button type="submit" @click="handleLogin">Se connecter</button>
+    <button type="submit">Se connecter</button>
   </form>
 </template>
 
@@ -69,25 +62,25 @@ main {
     border-radius: 10px;
     border: 1px solid var(--color-border);
 
-      > div {
-        margin: 10px 0;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
+    > div {
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
 
-        > div {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-      }
-      > p {
-        font-size: 26px;
-        font-weight: bold;
-        text-align: center;
-        margin: 1rem 0;
+      > div {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 0.5rem;
       }
     }
+    > p {
+      font-size: 26px;
+      font-weight: bold;
+      text-align: center;
+      margin: 1rem 0;
+    }
+  }
 }
 </style>

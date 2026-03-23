@@ -1,24 +1,25 @@
-import type { User } from '@/models/user'
-import axios from 'axios'
+import { type User } from '@/models/user'
+import axios, { type AxiosResponse } from 'axios'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 })
 
 export const authService = {
-  login(data: object) {
+  async login(data: object) : Promise<AxiosResponse> {
     return api.post('/token', data, {
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
   },
-  getUserProfile(token : string): Promise<User> {
-    return api.get('/users/me', {
-      headers: {'Authorization': `Bearer ${token}` }
-    }).then((res) => {
+  async getUserProfile(token: string): Promise<User> {
+    try {
+      const res = await api.get('/users/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       return res.data as User
-  }).catch((error) => {
-    throw error
-  })
+    } catch (error) {
+      throw error
+    }
   },
 }
 

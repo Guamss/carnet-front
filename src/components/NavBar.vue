@@ -1,29 +1,23 @@
 <script setup lang="ts">
 import { useAuth } from '@/composables/useAuth.ts'
 import { useRouter } from 'vue-router';
-import { useToast } from 'vue-toast-notification';
+import { sendToast } from '@/composables/utils.ts'
 
 const { isAuthenticated, logout } = useAuth()
-const toast = useToast()
 const router = useRouter()
 
-
 function handleLogout() {
-  router.push('/');
-  toast.info("Vous êtes maintenant déconnecté", {
-    position: "top-right"
-  })
+  router.push("login");
+  sendToast("Vous êtes maintenant déconnecté", "info")
   logout()
 }
 </script>
-
-<script></script>
 
 <template>
   <nav>
     <h1>Le Véritable Carnet</h1>
     <div>
-      <RouterLink to="/">Accueil</RouterLink>
+      <RouterLink v-show="isAuthenticated" to="/">Accueil</RouterLink>
       <RouterLink v-show="!isAuthenticated" to="/login">Se connecter</RouterLink>
       <RouterLink v-show="isAuthenticated" to="/profil">Profil</RouterLink>
       <a v-on:click="handleLogout" href="#" v-show="isAuthenticated">Se déconnecter</a>

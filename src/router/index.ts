@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-const isAuthenticated = true
-//TODO Handle Login
+import { useAuth } from '@/composables/useAuth.ts'
+const { isAuthenticated } = useAuth()
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -11,7 +11,7 @@ const router = createRouter({
   ],
 })
 router.beforeEach(async (to) => {
-  if (!isAuthenticated && to.name !== 'Login') {
+  if (!isAuthenticated.value && to.name !== 'Login') {
     return { name: 'Login' }
   }
   })
