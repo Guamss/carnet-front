@@ -3,4 +3,6 @@ export class Quote {
     text: string = ''
     said_by: string = ''
     date_added: string = ''
+    instead_of: string = ''
+    label: string = ''
 }
