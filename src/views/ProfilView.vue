@@ -8,6 +8,7 @@ const { token } = useAuth()
 const axiosClient = authService
 const me: Ref<User | undefined> = ref(undefined)
 
+//faut refacto ca c pas beau parceque y'aura de la redondance
 onMounted(async () => {
   if (token.value) {
     me.value = await axiosClient.getUserProfile(token.value)
@@ -20,8 +21,10 @@ const emptySpace = computed(() => {
 </script>
 
 <template>
-  <h2>Bonjour {{ me?.username }} !</h2>
-  <p>Les carnets que tu as fait :</p>
+  <div>
+    <h2>Bonjour {{ me?.username }} !</h2>
+    <p>Les carnets que tu as fait :</p>
+  </div>
   <div v-show="me?.carnets">
     <ListCarnet v-for="q in me?.carnets" :quote="q" :key="q.id"></ListCarnet>
     <div class="empty-article" v-for="e in emptySpace" :key="'empty-' + e" />
@@ -33,26 +36,30 @@ main {
   > div {
     width: 100%;
     max-width: 1200px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    align-items: stretch;
-    grid-auto-flow: dense;
+    margin: 1rem 0;
 
-    > .empty-article {
-      background-color: var(--color-bg-deactivate);
+    &:first-child {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      background-color: var(--color-bg-secondary);
       border: 1px solid var(--obsidian-700);
       border-radius: 12px;
+      padding: 1.5rem;
     }
-  }
-  @media (max-width: 900px) {
-    div {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  @media (max-width: 600px) {
-    div {
-      grid-template-columns: 1fr;
+
+    &:last-child {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      align-items: stretch;
+      grid-auto-flow: dense;
+
+      > .empty-article {
+        background-color: var(--color-bg-deactivate);
+        border: 1px solid var(--obsidian-700);
+        border-radius: 12px;
+      }
     }
   }
 }

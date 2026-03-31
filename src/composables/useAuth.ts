@@ -1,5 +1,6 @@
 import { computed, ref } from 'vue'
 import { authService } from '../api/axios.ts'
+import { jwtDecode } from 'jwt-decode'
 
 const token = ref(localStorage.getItem('token'))
 
@@ -23,8 +24,17 @@ export function useAuth() {
   }
 
   function isValid(token: string | null) {
-    //todo verifier si le token est valide
-    return true
+    if (!token) return false
+
+    try {
+      const decoded = jwtDecode(token)
+      if (!decoded.exp) return false
+      const currentTime = Math.floor(Date.now() / 1000)
+      return decoded.exp > currentTime
+
+    } catch (e) {
+      return false
+    }
   }
 
   const isAuthenticated = computed(() => {
@@ -32,6 +42,7 @@ export function useAuth() {
   })
 
   return {
+    isValid,
     isAuthenticated,
     logout,
     token,

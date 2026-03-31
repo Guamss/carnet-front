@@ -19,7 +19,6 @@ function createQuote() {
 </script>
 
 <template>
-  <h2>Liste des carnets :</h2>
   <dialog ref="dialogRef">
     <form @submit.prevent="createQuote">
       <p>Nouveau carnet</p>
@@ -40,6 +39,7 @@ function createQuote() {
     </form>
   </dialog>
   <div>
+    <h2>Liste des carnets :</h2>
     <button @click="showDialog">+ Crée un Carnet</button>
     <div>
       <label
@@ -59,12 +59,20 @@ function createQuote() {
 <style scoped>
 main {
   > div {
+    width: 100%;
+    max-width: 1200px;
+    margin: 1rem 0;
     display: flex;
     flex-direction: column;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--obsidian-700);
+    border-radius: 12px;
+    padding: 1.5rem;
 
     > div {
       display: flex;
       gap: 1.5rem;
+      justify-content: center;
     }
   }
 }

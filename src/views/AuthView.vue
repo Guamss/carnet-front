@@ -16,7 +16,7 @@ async function handleLogin() {
       password: password.value,
     })
     sendToast('Connecté avec succès !', 'success')
-    router.push('/')
+    await router.push('/')
   } catch {
     // handle mieux l'erreur avec AxiosError
     sendToast("Erreur d'authentification", 'error')

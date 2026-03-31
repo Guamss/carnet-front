@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuth } from '@/composables/useAuth.ts'
-const { isAuthenticated } = useAuth()
+const { logout, isValid, token} = useAuth()
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -11,8 +11,9 @@ const router = createRouter({
   ],
 })
 router.beforeEach(async (to) => {
-  if (!isAuthenticated.value && to.name !== 'Login') {
+  if (to.name !== 'Login' && !isValid(token.value)) {
+    logout()
     return { name: 'Login' }
   }
-  })
+})
 export default router
