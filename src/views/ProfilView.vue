@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { authService } from '@/api/axios'
-import Carnet from '@/components/Carnet.vue'
+import ListCarnet from '@/components/ListCarnet.vue'
 import { useAuth } from '@/composables/useAuth'
 import type { User } from '@/models/user'
 import { onMounted, ref, type Ref } from 'vue'
@@ -16,26 +16,23 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-show="me">
-    <h2 id="welcome">Bonjour {{ me?.username }} !</h2>
-    <main v-show="me?.carnets" class="carnets">
-      <Carnet v-for="q in me?.carnets" :quote="q"></Carnet>
-    </main>
+  <h2>Bonjour {{ me?.username }} !</h2>
+  <p>Les carnets que tu as fait :</p>
+  <div v-show="me?.carnets">
+    <ListCarnet v-for="q in me?.carnets" :quote="q" :key="q.id"></ListCarnet>
   </div>
 </template>
 
 <style scoped>
+main {
+  > div {
 
-#welcome {
-  text-align: center;
+    width: 100%;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: 1.5rem;
+    align-items: stretch;
+  }
 }
-
-.carnets {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  justify-content: center;
-  align-items: center;
-}
-
 </style>

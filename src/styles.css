@@ -27,6 +27,9 @@
   --color-border: var(--purple-700);
 
   --font-stack: 'Roboto', sans-serif;
+
+  --badge-color: #800000;
+  --badge-background-color: #ff8080;
 }
 
 *,
