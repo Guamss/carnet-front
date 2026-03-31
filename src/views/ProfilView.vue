@@ -3,7 +3,7 @@ import { authService } from '@/api/axios'
 import ListCarnet from '@/components/ListCarnet.vue'
 import { useAuth } from '@/composables/useAuth'
 import type { User } from '@/models/user'
-import { onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 const { token } = useAuth()
 const axiosClient = authService
 const me: Ref<User | undefined> = ref(undefined)
@@ -26,11 +26,12 @@ onMounted(async () => {
 <style scoped>
 main {
   > div {
-
     width: 100%;
     max-width: 1200px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-template-columns: repeat(3, minmax(min(100%, 230px), 1fr));
     gap: 1.5rem;
     align-items: stretch;
   }

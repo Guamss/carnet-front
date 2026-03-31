@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import type { Quote } from '@/models/carnet'
+import { computed, onMounted } from 'vue'
 
-defineProps<{ quote: Quote }>()
+const props = defineProps<{ quote: Quote }>()
+
+const spanClass = computed(() => {
+  const length = props.quote.text.length
+  if (length > 15) return 'span-2'
+  return 'span-1'
+})
+
+onMounted(() => {})
 </script>
 
 <template>
-  <article>
+  <article :class="spanClass">
     <blockquote>
       <div class="quote-container">
         <span class="quote-mark" aria-hidden="true">«</span>
@@ -30,6 +39,8 @@ defineProps<{ quote: Quote }>()
 
 <style scoped>
 article {
+  width: calc(33.333% - 1rem);
+  min-width: 250px;
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--obsidian-700);
   border-radius: 12px;
@@ -54,8 +65,10 @@ article {
   }
   .quote-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: 1.5rem;
+    margin: auto 0;
 
     .quote-mark {
       color: var(--color-accent);
@@ -71,6 +84,7 @@ article {
       font-weight: 600;
       color: var(--color-text-primary);
       line-height: 1.4;
+      text-align: center;
     }
   }
 
@@ -123,5 +137,9 @@ article {
       text-transform: uppercase;
     }
   }
+}
+
+.span-2 {
+  width: 100%;
 }
 </style>
