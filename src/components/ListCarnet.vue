@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import type { Quote } from '@/models/carnet'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps<{ quote: Quote }>()
 
 const spanClass = computed(() => {
   const length = props.quote.text.length
-  if (length > 15) return 'span-2'
+  if (length >= 15) return 'span-2'
   return 'span-1'
 })
-
-onMounted(() => {})
 </script>
 
 <template>
@@ -39,18 +37,16 @@ onMounted(() => {})
 
 <style scoped>
 article {
-  width: calc(33.333% - 1rem);
-  min-width: 250px;
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--obsidian-700);
   border-radius: 12px;
   padding: 1.5rem;
-  margin: 1rem 0;
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   justify-content: space-evenly;
+  grid-column: span 1;
 
   &:hover {
     border-color: var(--color-accent);
@@ -140,6 +136,6 @@ article {
 }
 
 .span-2 {
-  width: 100%;
+  grid-column: 1 / -1;
 }
 </style>

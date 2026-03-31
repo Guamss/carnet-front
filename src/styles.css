@@ -18,6 +18,7 @@
 
   --color-bg: var(--obsidian-900);
   --color-bg-secondary: var(--obsidian-800);
+  --color-bg-deactivate: rgba(33, 0, 75, 0.04);
 
   --color-text-primary: var(--text-white);
   --color-text-secondary: var(--text-muted);
