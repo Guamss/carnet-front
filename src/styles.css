@@ -111,7 +111,6 @@ select {
   border-radius: 0.5rem;
   color: var(--text-white);
   border: 1px solid var(--obsidian-700);
-  background-color: var(--obsidian-900);
 }
 
 select option {
@@ -129,5 +128,5 @@ dialog {
 
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);            
+  backdrop-filter: blur(4px);
 }

@@ -25,7 +25,7 @@ const filterQuotes = computed(() => {
 
   return quotes.value.filter((quote) => {
     const textMatch = quote.text.toLowerCase().includes(text)
-    const nameMatch = name === 'all' || (quote.said_by || '').toLowerCase().includes(n)
+    const nameMatch = name === 'all' || (quote.said_by || '').toLowerCase().includes(name)
     const labelMatch = (quote.label || '').toLowerCase().includes(label)
     return textMatch && nameMatch && labelMatch
   })
