@@ -6,6 +6,18 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 })
 
+export const quoteService = {
+  async createQuote(text: string, said_by: string, label: string, instead_of: string) {
+    return api.post(`/quotes`, {"text": text, "said_by": said_by, "label": label, "instead_of": instead_of})
+    .then((res) => {
+      return res.data as Quote;
+    })
+    .catch((err) => {
+      throw(err);
+    });
+  }
+}
+
 export const userService = {
   async listAllQuotes(offset: number) {
     return api

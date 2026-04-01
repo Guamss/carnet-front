@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { authService, userService } from '@/api/axios'
+import { authService, quoteService, userService } from '@/api/axios'
 import ListCarnet from '@/components/ListCarnet.vue'
-import type { Quote } from '@/models/carnet'
+import { sendToast } from '@/composables/utils'
+import { Quote } from '@/models/carnet'
 import type { User } from '@/models/user'
 import { onMounted, ref } from 'vue'
 const dialogRef = ref<HTMLDialogElement | null>(null)
 
 const newQuote = ref<string>('')
+const newInsteadOf = ref<string>('')
 const newAuthor = ref<string>('')
-const newLabels = ref<Array<string>>([''])
+const newLabel = ref<string>('')
 const quotes = ref<Quote[]>([])
 const users = ref<User[]>([])
 
@@ -24,8 +26,17 @@ const closeDialog = () => {
   dialogRef.value?.close()
 }
 
-function createQuote() {
-  console.log(newQuote.value, newAuthor.value, newLabels.value)
+async function createQuote() {
+  let createdQuote: Quote;
+  try {
+    createdQuote = await quoteService.createQuote(newQuote.value, newAuthor.value, newLabel.value, newInsteadOf.value);
+    quotes.value.push(createdQuote);
+    sendToast("Carnet créé avec succès", "success");
+    closeDialog();
+  }
+  catch(err) {
+    console.error(err);
+  }
 }
 </script>
 
@@ -34,20 +45,24 @@ function createQuote() {
     <form @submit.prevent="createQuote">
       <h2>Nouveau carnet</h2>
       <div class="input">
-        <label> Carnet : </label>
+        <label> Citation : </label>
         <input v-model="newQuote" type="text" id="create-quote" required />
       </div>
       <div class="input">
-        <label> Auteur : </label>
+        <label>{{ newQuote !== '' ? `« ${newQuote} »` : '' }} à la place de :</label>
+        <input v-model="newInsteadOf" type="text" id="create-author" required />
+      </div>
+      <div class="input">
+        <label> Le débile concerné : </label>
         <input v-model="newAuthor" type="text" id="create-author" required />
       </div>
       <div class="input">
-        <label> Associer un label : </label>
-        <input v-model="newLabels" type="text" id="create-label" required />
+        <label> Catégorie : </label>
+        <input v-model="newLabel" type="text" id="create-label" required />
       </div>
       <div>
-        <button id="cancel" @click="closeDialog">Annuler</button>
         <button type="submit" @submit="createQuote">Ajouter</button>
+        <button id="cancel" @click="closeDialog">Annuler</button>
       </div>
     </form>
   </dialog>
@@ -82,7 +97,7 @@ function createQuote() {
   display: flex;
   align-items: center;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-bottom: 2rem;
 }
 
@@ -107,6 +122,7 @@ dialog {
 
   div {
     display: flex;
+    flex-direction: row-reverse;
     justify-content: space-between;
     align-items: stretch;
 
