@@ -4,7 +4,7 @@ import ListCarnet from '@/components/ListCarnet.vue'
 import { sendToast } from '@/composables/utils'
 import { Quote } from '@/models/carnet'
 import type { User } from '@/models/user'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 const dialogRef = ref<HTMLDialogElement | null>(null)
 
 const newQuote = ref<string>('')
@@ -13,6 +13,15 @@ const newAuthor = ref<string>('')
 const newLabel = ref<string>('')
 const quotes = ref<Quote[]>([])
 const users = ref<User[]>([])
+
+const filterText = ref<string>('')
+const filterLabels = ref<string>('')
+const filterName = ref<string>('all')
+
+const filterQuotes = computed(() =>
+  quotes.value.filter((quote) => quote.text.includes(filterText.value) && (filterName.value === 'all' || quote.said_by.includes(filterName.value)
+  ))
+)
 
 onMounted(async () => {
   quotes.value = await userService.listAllQuotes(0)
@@ -27,15 +36,19 @@ const closeDialog = () => {
 }
 
 async function createQuote() {
-  let createdQuote: Quote;
+  let createdQuote: Quote
   try {
-    createdQuote = await quoteService.createQuote(newQuote.value, newAuthor.value, newLabel.value, newInsteadOf.value);
-    quotes.value.push(createdQuote);
-    sendToast("Carnet créé avec succès", "success");
-    closeDialog();
-  }
-  catch(err) {
-    console.error(err);
+    createdQuote = await quoteService.createQuote(
+      newQuote.value,
+      newAuthor.value,
+      newLabel.value,
+      newInsteadOf.value,
+    )
+    quotes.value.push(createdQuote)
+    sendToast('Carnet créé avec succès', 'success')
+    closeDialog()
+  } catch (err) {
+    console.error(err)
   }
 }
 </script>
@@ -46,28 +59,25 @@ async function createQuote() {
     <div class="filter-section">
       <label
         >Filtrer par nom :
-        <select name="cars" id="cars">
-          <option value="0">TOUS</option>
-          <option v-for="user in users" :key="user.id" :value="user.id">{{ user.username.toUpperCase() }}</option>
+        <select v-model="filterName" name="cars" id="cars">
+          <option value="all">TOUS</option>
+          <option v-for="user in users" :key="user.id" :value="user.username">
+            {{ user.username.toUpperCase() }}
+          </option>
         </select>
       </label>
       <label
         >Filtrer par carnet :
-        <input type="text" id="filter-labels" placeholder="Lapin contre crétin..." />
+        <input v-model="filterText" type="text" placeholder="Lapin contre crétin..." />
       </label>
       <label
         >Filtrer par tags :
-        <input type="text" id="filter-labels" placeholder="C'est chaud" />
+        <input v-model="filterLabels" type="text" placeholder="C'est chaud" />
       </label>
     </div>
     <button @click="showDialog">+ Crée un Carnet</button>
-
   </div>
-
-  <div>
-    <ListCarnet :quotes="quotes" />
-  </div>
-
+  <ListCarnet :quotes="filterQuotes" />
   <dialog ref="dialogRef">
     <form @submit.prevent="createQuote">
       <h2>Nouveau carnet</h2>
@@ -89,7 +99,7 @@ async function createQuote() {
       </div>
       <div>
         <button type="submit">Ajouter</button>
-        <button id="cancel" @click="closeDialog">Annuler</button>
+        <button type="button" id="cancel" @click="closeDialog">Annuler</button>
       </div>
     </form>
   </dialog>

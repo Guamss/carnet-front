@@ -22,7 +22,7 @@ const getSpanClass = (quote: Quote) => {
       <blockquote>
         <div class="quote-container">
           <span class="quote-mark" aria-hidden="true">«</span>
-          <h3 class="quote-text">{{ quote.text }}</h3>
+          <p class="quote-text">{{ quote.text }}</p>
           <span class="quote-mark" aria-hidden="true">»</span>
         </div>
 
@@ -104,6 +104,8 @@ article {
       color: var(--color-text-primary);
       line-height: 1.4;
       text-align: center;
+      overflow-wrap: break-word;
+      min-width: 0;
     }
   }
 
