@@ -18,10 +18,18 @@ const filterText = ref<string>('')
 const filterLabels = ref<string>('')
 const filterName = ref<string>('all')
 
-const filterQuotes = computed(() =>
-  quotes.value.filter((quote) => quote.text.includes(filterText.value) && (filterName.value === 'all' || quote.said_by.includes(filterName.value)
-  ))
-)
+const filterQuotes = computed(() => {
+  const text = filterText.value.toLowerCase()
+  const name = filterName.value.toLowerCase()
+  const label = filterLabels.value.toLowerCase()
+
+  return quotes.value.filter((quote) => {
+    const textMatch = quote.text.toLowerCase().includes(text)
+    const nameMatch = name === 'all' || (quote.said_by || '').toLowerCase().includes(n)
+    const labelMatch = (quote.label || '').toLowerCase().includes(label)
+    return textMatch && nameMatch && labelMatch
+  })
+})
 
 onMounted(async () => {
   quotes.value = await userService.listAllQuotes(0)
@@ -59,7 +67,7 @@ async function createQuote() {
     <div class="filter-section">
       <label
         >Filtrer par nom :
-        <select v-model="filterName" name="cars" id="cars">
+        <select v-model="filterName" name="filter-name" id="filter-name">
           <option value="all">TOUS</option>
           <option v-for="user in users" :key="user.id" :value="user.username">
             {{ user.username.toUpperCase() }}
@@ -110,7 +118,19 @@ async function createQuote() {
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
+  gap: 1.5rem;
+  > label {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      > input, select {
+        border-radius: 8px;
+        border: 1px solid var(--obsidian-700);
+        color: var(--text-white, #fff);
+      }
+  }
 }
 
 dialog {
