@@ -9,6 +9,7 @@ const axiosClient = authService
 const me: Ref<User | undefined> = ref(undefined)
 
 //faut refacto ca c pas beau parceque y'aura de la redondance
+// cmt on fait alors wallah ?
 onMounted(async () => {
   if (token.value) {
     me.value = await axiosClient.getUserProfile(token.value)
