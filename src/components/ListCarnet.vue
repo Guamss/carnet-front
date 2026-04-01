@@ -2,40 +2,63 @@
 import type { Quote } from '@/models/carnet'
 import { computed } from 'vue'
 
-const props = defineProps<{ quote: Quote }>()
+const props = defineProps<{ quotes: Quote[] }>()
 
-const spanClass = computed(() => {
-  const length = props.quote.text.length
+const emptySpace = computed(() => {
+  const largeQuote = props.quotes?.filter((carnet) => carnet.text.length < 15) || []
+  return 3 - ((largeQuote.length % 3) % 3)
+})
+
+const getSpanClass = (quote: Quote) => {
+  const length = quote.text.length
   if (length >= 15) return 'span-2'
   return 'span-1'
-})
+}
 </script>
 
 <template>
-  <article :class="spanClass">
-    <blockquote>
-      <div class="quote-container">
-        <span class="quote-mark" aria-hidden="true">«</span>
-        <h3 class="quote-text">{{ quote.text }}</h3>
-        <span class="quote-mark" aria-hidden="true">»</span>
-      </div>
+  <div class="list-carnet-grid">
+    <article v-for="quote in quotes" :key="quote.id" :class="getSpanClass(quote)">
+      <blockquote>
+        <div class="quote-container">
+          <span class="quote-mark" aria-hidden="true">«</span>
+          <h3 class="quote-text">{{ quote.text }}</h3>
+          <span class="quote-mark" aria-hidden="true">»</span>
+        </div>
 
-      <p class="replacement-clause">
-        <span class="label">à la place de</span>
-        <cite class="placeholder-text">« {{ quote.instead_of }} »</cite>
-      </p>
-    </blockquote>
+        <p class="replacement-clause">
+          <span class="label">à la place de</span>
+          <cite class="placeholder-text">« {{ quote.instead_of }} »</cite>
+        </p>
+      </blockquote>
 
-    <footer>
-      <p>
-        dit par <span class="author-name">{{ quote.said_by.toUpperCase() }}</span>
-      </p>
-      <span class="badge">{{ quote.label }}</span>
-    </footer>
-  </article>
+      <footer>
+        <p>
+          dit par <span class="author-name">{{ quote.said_by.toUpperCase() }}</span>
+        </p>
+        <span class="badge">{{ quote.label }}</span>
+      </footer>
+    </article>
+    <div class="empty-article" v-for="e in emptySpace" :key="'empty-' + e" />
+  </div>
 </template>
 
 <style scoped>
+.list-carnet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-items: stretch;
+  grid-auto-flow: dense;
+  width: 100%;
+}
+
+.list-carnet-grid > .empty-article {
+  background-color: var(--color-bg-deactivate);
+  border: 1px solid var(--obsidian-700);
+  border-radius: 12px;
+}
+
 article {
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--obsidian-700);

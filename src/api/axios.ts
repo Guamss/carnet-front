@@ -1,10 +1,21 @@
 import type { Quote } from '@/models/carnet'
 import { type User } from '@/models/user'
-import axios, { type AxiosResponse } from 'axios'
+import axios, { AxiosError, type AxiosResponse } from 'axios'
+import { sendToast } from '@/composables/utils'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 })
+
+export function handleApiError(error: unknown): never {
+  if (error instanceof AxiosError) {
+    const errorMessage = error.response?.data?.message || error.response?.data || error.message || "Erreur de l'API"
+    sendToast(errorMessage, 'error')
+  } else {
+    sendToast("Une erreur inattendue s'est produite", 'error')
+  }
+  throw error
+}
 
 export const quoteService = {
   async createQuote(text: string, said_by: string, label: string, instead_of: string) {
@@ -12,9 +23,7 @@ export const quoteService = {
     .then((res) => {
       return res.data as Quote;
     })
-    .catch((err) => {
-      throw(err);
-    });
+    .catch(handleApiError);
   }
 }
 
@@ -25,18 +34,14 @@ export const userService = {
       .then((res) => {
         return res.data as Quote[]
       })
-      .catch((error) => {
-        throw error
-      });
+      .catch(handleApiError);
   },
   async listAllUser() {
     return api.get('/users')
     .then((res) => {
       return res.data as User[]
     })
-    .catch((error) => {
-      throw error
-    });
+    .catch(handleApiError);
   }
 }
 
@@ -44,7 +49,7 @@ export const authService = {
   async login(data: object): Promise<AxiosResponse> {
     return api.post('/token', data, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    })
+    }).catch(handleApiError)
   },
   async getUserProfile(token: string): Promise<User> {
     try {
@@ -53,7 +58,7 @@ export const authService = {
       })
       return res.data as User
     } catch (error) {
-      throw error
+      return handleApiError(error) as never
     }
   },
 }

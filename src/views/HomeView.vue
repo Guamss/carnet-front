@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { authService, quoteService, userService } from '@/api/axios'
+import { quoteService, userService } from '@/api/axios'
 import ListCarnet from '@/components/ListCarnet.vue'
 import { sendToast } from '@/composables/utils'
 import { Quote } from '@/models/carnet'
@@ -41,6 +41,33 @@ async function createQuote() {
 </script>
 
 <template>
+  <div>
+    <h2>Liste des carnets :</h2>
+    <div class="filter-section">
+      <label
+        >Filtrer par nom :
+        <select name="cars" id="cars">
+          <option value="0">TOUS</option>
+          <option v-for="user in users" :key="user.id" :value="user.id">{{ user.username.toUpperCase() }}</option>
+        </select>
+      </label>
+      <label
+        >Filtrer par carnet :
+        <input type="text" id="filter-labels" placeholder="Lapin contre crétin..." />
+      </label>
+      <label
+        >Filtrer par tags :
+        <input type="text" id="filter-labels" placeholder="C'est chaud" />
+      </label>
+    </div>
+    <button @click="showDialog">+ Crée un Carnet</button>
+
+  </div>
+
+  <div>
+    <ListCarnet :quotes="quotes" />
+  </div>
+
   <dialog ref="dialogRef">
     <form @submit.prevent="createQuote">
       <h2>Nouveau carnet</h2>
@@ -61,36 +88,11 @@ async function createQuote() {
         <input v-model="newLabel" type="text" id="create-label" required />
       </div>
       <div>
-        <button type="submit" @submit="createQuote">Ajouter</button>
+        <button type="submit">Ajouter</button>
         <button id="cancel" @click="closeDialog">Annuler</button>
       </div>
     </form>
   </dialog>
-  <div>
-    <h2>Liste des carnets :</h2>
-    <div class="filter-section">
-      <label
-        >Filtrer par nom :
-        <select name="cars" id="cars">
-          <option value="0">TOUS</option>
-          <option v-for="user in users" :value="user.id">{{ user.username.toUpperCase() }}</option>
-        </select>
-      </label>
-      <label
-        >Filtrer par carnet :
-        <input type="text" id="filter-labels" placeholder="Lapin contre crétin..." />
-      </label>
-      <label
-        >Filtrer par tags :
-        <input type="text" id="filter-labels" placeholder="C'est chaud" />
-      </label>
-      <button @click="showDialog">+ Crée un Carnet</button>
-    </div>
-    <div>
-      <ListCarnet v-for="quote in quotes" :quote="quote" />
-    </div>
-  </div>
-  <section></section>
 </template>
 <style scoped>
 .filter-section {
@@ -98,7 +100,7 @@ async function createQuote() {
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  width: 100%;
 }
 
 dialog {
@@ -137,17 +139,14 @@ main {
     width: 100%;
     max-width: 1200px;
     margin: 1rem 0;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--obsidian-700);
-    border-radius: 12px;
-    padding: 1.5rem;
 
-    > div {
+    &:first-child {
       display: flex;
-      gap: 1.5rem;
-      justify-content: center;
+      flex-direction: column;
+      background-color: var(--color-bg-secondary);
+      border: 1px solid var(--obsidian-700);
+      border-radius: 12px;
+      padding: 1.5rem;
     }
   }
 }
