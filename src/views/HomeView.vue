@@ -34,6 +34,9 @@ const filterQuotes = computed(() => {
 onMounted(async () => {
   quotes.value = await userService.listAllQuotes(0)
   users.value = await userService.listAllUser()
+  if (users.value.length && users.value[0]?.username) {
+    newAuthor.value = users.value[0].username;
+  }
 })
 
 const showDialog = () => {
@@ -69,7 +72,7 @@ async function createQuote() {
         >Filtrer par nom :
         <select v-model="filterName" name="filter-name" id="filter-name">
           <option value="all">TOUS</option>
-          <option v-for="user in users" :key="user.id" :value="user.username">
+          <option v-for="user in users" :key="user.username" :value="user.username">
             {{ user.username.toUpperCase() }}
           </option>
         </select>
@@ -99,7 +102,11 @@ async function createQuote() {
       </div>
       <div class="input">
         <label> Le débile concerné : </label>
-        <input v-model="newAuthor" type="text" id="create-author" required />
+        <select v-model="newAuthor">
+          <option v-for="user in users" :key="user.id" :value="user.username">
+            {{ user.username.toUpperCase() }}
+          </option>
+        </select>
       </div>
       <div class="input">
         <label> Catégorie : </label>
@@ -120,16 +127,17 @@ async function createQuote() {
   justify-content: space-between;
   gap: 1.5rem;
   > label {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      gap: 0.5rem;
-      font-size: 0.95rem;
-      > input, select {
-        border-radius: 8px;
-        border: 1px solid var(--obsidian-700);
-        color: var(--text-white, #fff);
-      }
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    > input,
+    select {
+      border-radius: 8px;
+      border: 1px solid var(--obsidian-700);
+      color: var(--text-white, #fff);
+    }
   }
 }
 
