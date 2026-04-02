@@ -4,6 +4,7 @@ import ListCarnet from '@/components/ListCarnet.vue'
 import { sendToast } from '@/composables/utils'
 import { Quote } from '@/models/carnet'
 import type { User } from '@/models/user'
+import moment from 'moment'
 import { computed, onMounted, ref } from 'vue'
 const dialogRef = ref<HTMLDialogElement | null>(null)
 
@@ -17,6 +18,7 @@ const users = ref<User[]>([])
 const filterText = ref<string>('')
 const filterLabels = ref<string>('')
 const filterName = ref<string>('all')
+const triDate = ref<string>('↑')
 
 const filterQuotes = computed(() => {
   const text = filterText.value.toLowerCase()
@@ -35,9 +37,32 @@ onMounted(async () => {
   quotes.value = await userService.listAllQuotes(0)
   users.value = await userService.listAllUser()
   if (users.value.length && users.value[0]?.username) {
-    newAuthor.value = users.value[0].username;
+    newAuthor.value = users.value[0].username
   }
+  quotes.value.map((q) => moment(q.date_added))
+  sortQuotes(false);
 })
+
+function sortQuotes(asc: boolean) {
+  quotes.value.sort((a, b) => {
+    if (a.date_added < b.date_added) {
+      return asc ? -1 : 1
+    } else if (a.date_added > b.date_added) {
+      return asc ? 1 : -1
+    }
+    return 0
+  })
+}
+
+function changeSortOrder() {
+  if (triDate.value === '↓') {
+    triDate.value = '↑'
+    sortQuotes(false);
+  } else {
+    sortQuotes(true);
+    triDate.value = '↓'
+  }
+}
 
 const showDialog = () => {
   dialogRef.value?.showModal()
@@ -57,6 +82,7 @@ async function createQuote() {
     )
     quotes.value.push(createdQuote)
     sendToast('Carnet créé avec succès', 'success')
+    sortQuotes(triDate.value === '↓' ? false : true)
     closeDialog()
   } catch (err) {
     console.error(err)
@@ -85,6 +111,9 @@ async function createQuote() {
         >Filtrer par tags :
         <input v-model="filterLabels" type="text" placeholder="C'est chaud" />
       </label>
+      <div>
+        <button @click="changeSortOrder">Tri par date {{ triDate }}</button>
+      </div>
     </div>
     <button @click="showDialog">+ Crée un Carnet</button>
   </div>

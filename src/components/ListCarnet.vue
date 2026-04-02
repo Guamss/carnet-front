@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatDate } from '@/composables/utils';
 import type { Quote } from '@/models/carnet'
 import { computed } from 'vue'
 
@@ -14,11 +15,13 @@ const getSpanClass = (quote: Quote) => {
   if (length >= 15) return 'span-2'
   return 'span-1'
 }
+
 </script>
 
 <template>
   <div class="list-carnet-grid">
     <article v-for="quote in quotes" :key="quote.id" :class="getSpanClass(quote)">
+          <!-- <p>{{ formatDate(quote.date_added) }}</p> -->
       <blockquote>
         <div class="quote-container">
           <span class="quote-mark" aria-hidden="true">«</span>

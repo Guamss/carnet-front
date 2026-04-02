@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { useToast } from 'vue-toast-notification'
 
 const toast = useToast()
@@ -7,7 +8,7 @@ const duration = 3000
 export function sendToast(message: string, type: string): void {
   switch (type) {
     case 'success':
-      toast.success(message, {position,duration})
+      toast.success(message, { position, duration })
       break
     case 'error':
       toast.error(message, { position, duration })
@@ -19,4 +20,8 @@ export function sendToast(message: string, type: string): void {
       toast.warning(message, { position, duration })
       break
   }
+}
+
+export function formatDate(date: string) {
+  return moment(date).format('DD/MM/YYYY')
 }
