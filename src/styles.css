@@ -125,6 +125,11 @@ dialog {
   border-radius: 0.5em;
   min-width: 600px;
 }
+@media(max-width: 800px) {
+  dialog {
+    min-width:0 ;
+  }
+}
 
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.7);

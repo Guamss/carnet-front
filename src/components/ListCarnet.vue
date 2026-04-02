@@ -63,6 +63,13 @@ const getSpanClass = (quote: Quote) => {
   grid-auto-flow: dense;
   width: 100%;
 }
+@media (max-width: 450px) {
+  .list-carnet-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+}
 
 .list-carnet-grid > .empty-article {
   background-color: var(--color-bg-deactivate);
@@ -124,6 +131,8 @@ article {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    min-width: 0;
 
     .label {
       font-size: 0.8rem;
@@ -137,6 +146,11 @@ article {
       color: var(--color-text-secondary);
       font-style: italic;
       font-size: 1rem;
+      width: 100%;
+      text-align: center;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      min-width: 0;
     }
   }
 

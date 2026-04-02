@@ -197,6 +197,20 @@ main {
     }
   }
 }
+@media (max-width: 450px) {
+  h2 {
+    text-align: center;
+  }
+  .filter-section {
+    align-items: center;
+    flex-direction: column;
+
+    > label {
+      align-items: center;
+    }
+  }
+
+}
 
 dialog {
   > form {
