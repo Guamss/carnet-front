@@ -40,7 +40,7 @@ onMounted(async () => {
     newAuthor.value = users.value[0].username
   }
   quotes.value.map((q) => moment(q.date_added))
-  sortQuotes(false);
+  sortQuotes(false)
 })
 
 function sortQuotes(asc: boolean) {
@@ -57,9 +57,9 @@ function sortQuotes(asc: boolean) {
 function changeSortOrder() {
   if (triDate.value === '↓') {
     triDate.value = '↑'
-    sortQuotes(false);
+    sortQuotes(false)
   } else {
-    sortQuotes(true);
+    sortQuotes(true)
     triDate.value = '↓'
   }
 }
@@ -82,7 +82,7 @@ async function createQuote() {
     )
     quotes.value.push(createdQuote)
     sendToast('Carnet créé avec succès', 'success')
-    sortQuotes(triDate.value === '↓' ? false : true)
+    sortQuotes(triDate.value !== '↓')
     closeDialog()
   } catch (err) {
     console.error(err)
@@ -111,9 +111,7 @@ async function createQuote() {
         >Filtrer par tags :
         <input v-model="filterLabels" type="text" placeholder="C'est chaud" />
       </label>
-      <div>
-        <button @click="changeSortOrder">Tri par date {{ triDate }}</button>
-      </div>
+      <button @click="changeSortOrder">Tri par date {{ triDate }}</button>
     </div>
     <button @click="showDialog">+ Crée un Carnet</button>
   </div>
@@ -149,12 +147,33 @@ async function createQuote() {
   </dialog>
 </template>
 <style scoped>
+main {
+  > div {
+    width: 100%;
+    max-width: 1200px;
+    margin: 1rem 0;
+
+    &:first-child {
+      display: flex;
+      gap: 1.5rem;
+      flex-direction: column;
+      background-color: var(--color-bg-secondary);
+      border: 1px solid var(--obsidian-700);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+  }
+}
+
 .filter-section {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   flex-direction: row;
   justify-content: space-between;
   gap: 1.5rem;
+  > button {
+    margin: 0;
+  }
   > label {
     display: flex;
     flex-direction: column;
@@ -197,23 +216,6 @@ dialog {
 
     > button {
       width: 45%;
-    }
-  }
-}
-
-main {
-  > div {
-    width: 100%;
-    max-width: 1200px;
-    margin: 1rem 0;
-
-    &:first-child {
-      display: flex;
-      flex-direction: column;
-      background-color: var(--color-bg-secondary);
-      border: 1px solid var(--obsidian-700);
-      border-radius: 12px;
-      padding: 1.5rem;
     }
   }
 }

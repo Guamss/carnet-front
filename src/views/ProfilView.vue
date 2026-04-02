@@ -12,8 +12,8 @@ const { changePassword } = useAuth()
 
 const me: Ref<User | undefined> = ref(undefined)
 
-const newPwd = ref<string>('');
-const confirmNewPwd = ref<string>('');
+const newPwd = ref<string>('')
+const confirmNewPwd = ref<string>('')
 
 //faut refacto ca c pas beau parceque y'aura de la redondance
 // cmt on fait alors wallah ?
@@ -26,7 +26,7 @@ onMounted(async () => {
 async function handleChangePassword() {
   try {
     await changePassword(newPwd.value, confirmNewPwd.value)
-    sendToast("Mot de passe changé avec succès", "success")
+    sendToast('Mot de passe changé avec succès', 'success')
     newPwd.value = ''
     confirmNewPwd.value = ''
   } catch (err) {
@@ -36,9 +36,9 @@ async function handleChangePassword() {
 </script>
 
 <template>
-  <div id="change-pwd">
+  <div class="change-pwd">
     <form @submit.prevent="handleChangePassword">
-      <h2>Changer son mot de passe</h2>
+      <h2>Changer le mot de passe de {{ me?.username }}</h2>
       <div class="input">
         <label>Nouveau mot de passe</label>
         <input v-model="newPwd" type="password" />
@@ -50,21 +50,14 @@ async function handleChangePassword() {
       <button type="submit">Changer le mot de passe</button>
     </form>
   </div>
-  <div>
-    <h2>Les carnets que tu as dit :</h2>
-  </div>
-  <div v-if="me?.carnets">
-    <ListCarnet :quotes="me.carnets"></ListCarnet>
-  </div>
 </template>
 
 <style scoped>
-#change-pwd {
-  display: flex;
-  align-items: center;
-}
+
 
 form {
+  display: flex;
+  flex-direction: column;
   h2 {
     text-align: center;
     margin-bottom: 4rem;
@@ -83,7 +76,7 @@ form {
 main {
   > div {
     width: 100%;
-    max-width: 1200px;
+    max-width: 600px;
     margin: 1rem 0;
 
     &:first-child {
