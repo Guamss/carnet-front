@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatDate } from '@/composables/utils'
+import { actionCommentaries, formatDate } from '@/composables/utils'
 import type { Quote } from '@/models/carnet'
 import { computed } from 'vue'
 
@@ -20,8 +20,8 @@ const getSpanClass = (quote: Quote) => {
 <template>
   <div class="list-carnet-grid">
     <article v-for="quote in quotes" :key="quote.id" :class="getSpanClass(quote)">
-      <!-- <p>{{ formatDate(quote.date_added) }}</p> -->
-      <blockquote>
+      <!-- TYPE = CITATION -->
+      <blockquote v-if="quote.type === 'CITATION'">
         <div class="quote-container">
           <span class="quote-mark" aria-hidden="true">«</span>
           <p class="quote-text">{{ quote.text }}</p>
@@ -33,10 +33,18 @@ const getSpanClass = (quote: Quote) => {
           <cite class="placeholder-text">« {{ quote.instead_of }} »</cite>
         </p>
       </blockquote>
-
+      <!-- TYPE = ACTION -->
+       <blockquote v-if="quote.type === 'ACTION'">
+        <div class="quote-container">
+          <p class="quote-text">{{ quote.text }}</p>
+        </div>
+        <p class="replacement-clause">
+          <span class="label">{{ actionCommentaries[Math.floor(Math.random() * actionCommentaries.length)] }}</span>
+        </p>
+       </blockquote>
       <footer>
         <p>
-          dit par <span class="author-name">{{ quote.said_by.toUpperCase() }}</span> le
+          {{ quote.type === "CITATION" ? "carnet dit par" : "carnet fait par" }} <span class="author-name">{{ quote.said_by.toUpperCase() }}</span> le
           <span class="author-name">{{ formatDate(quote.date_added) }} </span>
         </p>
         <span class="badge">{{ quote.label }}</span>

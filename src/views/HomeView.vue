@@ -8,6 +8,7 @@ import moment from 'moment'
 import { computed, onMounted, ref } from 'vue'
 const dialogRef = ref<HTMLDialogElement | null>(null)
 
+const selectedType = ref<string>('CITATION')
 const newQuote = ref<string>('')
 const newInsteadOf = ref<string>('')
 const newAuthor = ref<string>('')
@@ -78,7 +79,8 @@ async function createQuote() {
       newQuote.value,
       newAuthor.value,
       newLabel.value,
-      newInsteadOf.value,
+      selectedType.value === "CITATION" ? newInsteadOf.value : "",
+      selectedType.value
     )
     quotes.value.push(createdQuote)
     sendToast('Carnet créé avec succès', 'success')
@@ -120,10 +122,17 @@ async function createQuote() {
     <form @submit.prevent="createQuote">
       <h2>Nouveau carnet</h2>
       <div class="input">
-        <label> Citation : </label>
-        <input v-model="newQuote" type="text" id="create-quote" required />
+        <label>Le carnet décrit-il une action ou une citation : </label>
+        <select v-model="selectedType">
+          <option value="CITATION">CITATION</option>
+          <option value="ACTION">ACTION</option>
+        </select>
       </div>
       <div class="input">
+        <label>{{ selectedType === "CITATION" ? "Citation" : "Action" }} : </label>
+        <input v-model="newQuote" type="text" id="create-quote" required />
+      </div>
+      <div v-show="selectedType==='CITATION'" class="input">
         <label>{{ newQuote !== '' ? `« ${newQuote} »` : '' }} à la place de :</label>
         <input v-model="newInsteadOf" type="text" id="create-author" required />
       </div>

@@ -5,6 +5,7 @@ export class Quote {
     text: string = ''
     said_by: string = ''
     date_added: string | Moment = ''
+    type: string = 'CITATION'
     instead_of: string = ''
     label: string = ''
 }

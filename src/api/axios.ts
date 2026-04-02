@@ -19,9 +19,9 @@ export function handleApiError(error: unknown): never {
 }
 
 export const quoteService = {
-  async createQuote(text: string, said_by: string, label: string, instead_of: string) {
+  async createQuote(text: string, said_by: string, label: string, instead_of: string, type: string) {
     return api
-      .post(`/quotes`, { text: text, said_by: said_by, label: label, instead_of: instead_of })
+      .post(`/quotes`, { text: text, said_by: said_by, label: label, instead_of: instead_of, type: type })
       .then((res) => {
         return res.data as Quote
       })
