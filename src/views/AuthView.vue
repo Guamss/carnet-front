@@ -31,17 +31,11 @@ async function handleLogin() {
         <label for="username">Nom d'utilisateur</label>
         <input v-model="username" id="username" placeholder="Yves" type="text" required />
       </div>
-      <!-- <ul>
-      <li style="color: red">{{}}</li>
-    </ul> -->
       <div>
         <label for="password">Mot de passe</label>
         <input v-model="password" id="password" placeholder="*******" type="password" required />
       </div>
     </div>
-    <!-- <ul>
-      <li style="color: red">{{}}</li>
-    </ul> -->
     <button type="submit">Se connecter</button>
   </form>
 </template>

@@ -37,6 +37,9 @@ export function useAuth() {
     }
   }
 
+  function changePassword(newPwd: string, confirmNewPwd: string) {
+    return authService.changePassword(newPwd, confirmNewPwd, token.value)
+  }
   const isAuthenticated = computed(() => {
     return token.value !== null && isValid(token.value)
   })
@@ -44,6 +47,7 @@ export function useAuth() {
   return {
     isValid,
     isAuthenticated,
+    changePassword,
     logout,
     token,
     login,

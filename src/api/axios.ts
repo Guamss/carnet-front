@@ -9,8 +9,9 @@ const api = axios.create({
 
 export function handleApiError(error: unknown): never {
   if (error instanceof AxiosError) {
-    const errorMessage = error.response?.data?.message || error.response?.data || error.message || "Erreur de l'API"
-    sendToast(errorMessage, 'error')
+    const errorMessage =
+      error.response?.data?.message || error.response?.data || error.message || "Erreur de l'API"
+    sendToast(errorMessage.detail, 'error')
   } else {
     sendToast("Une erreur inattendue s'est produite", 'error')
   }
@@ -19,12 +20,13 @@ export function handleApiError(error: unknown): never {
 
 export const quoteService = {
   async createQuote(text: string, said_by: string, label: string, instead_of: string) {
-    return api.post(`/quotes`, {"text": text, "said_by": said_by, "label": label, "instead_of": instead_of})
-    .then((res) => {
-      return res.data as Quote;
-    })
-    .catch(handleApiError);
-  }
+    return api
+      .post(`/quotes`, { text: text, said_by: said_by, label: label, instead_of: instead_of })
+      .then((res) => {
+        return res.data as Quote
+      })
+      .catch(handleApiError)
+  },
 }
 
 export const userService = {
@@ -34,22 +36,25 @@ export const userService = {
       .then((res) => {
         return res.data as Quote[]
       })
-      .catch(handleApiError);
+      .catch(handleApiError)
   },
   async listAllUser() {
-    return api.get('/users')
-    .then((res) => {
-      return res.data as User[]
-    })
-    .catch(handleApiError);
-  }
+    return api
+      .get('/users')
+      .then((res) => {
+        return res.data as User[]
+      })
+      .catch(handleApiError)
+  },
 }
 
 export const authService = {
   async login(data: object): Promise<AxiosResponse> {
-    return api.post('/token', data, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    }).catch(handleApiError)
+    return api
+      .post('/token', data, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      })
+      .catch(handleApiError)
   },
   async getUserProfile(token: string): Promise<User> {
     try {
@@ -61,6 +66,16 @@ export const authService = {
       return handleApiError(error) as never
     }
   },
+  async changePassword(newPwd: string, confirmNewPwd: string, token: string | null) {
+    return api
+      .put(
+        '/users',
+        { "new_pwd": newPwd, "confirm_new_pwd": confirmNewPwd },
+        { headers: { Authorization: `Bearer ${token}` } },
+      )
+      .then((res) => {
+        return res.data as User
+      })
+      .catch(handleApiError)
+  },
 }
-
-//TODO : Do the API Call
