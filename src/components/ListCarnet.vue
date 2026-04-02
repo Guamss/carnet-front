@@ -36,7 +36,8 @@ const getSpanClass = (quote: Quote) => {
 
       <footer>
         <p>
-          dit par <span class="author-name">{{ quote.said_by.toUpperCase() }}</span>
+          dit par <span class="author-name">{{ quote.said_by.toUpperCase() }}</span> le
+          <span class="author-name">{{ formatDate(quote.date_added) }} </span>
         </p>
         <span class="badge">{{ quote.label }}</span>
       </footer>
@@ -161,10 +162,10 @@ article {
     }
   }
 }
-.span-1{
+.span-1 {
   grid-column: span 1;
 }
-.span-2{
+.span-2 {
   grid-column: span 3;
 }
 </style>

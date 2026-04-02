@@ -22,6 +22,6 @@ export function sendToast(message: string, type: string): void {
   }
 }
 
-export function formatDate(date: string) {
+export function formatDate(date: string | moment.Moment) {
   return moment(date).format('DD/MM/YYYY')
 }
