@@ -132,7 +132,7 @@ async function createQuote() {
         <label>{{ selectedType === "CITATION" ? "Citation" : "Action" }} : </label>
         <input v-model="newQuote" type="text" id="create-quote" required />
       </div>
-      <div v-show="selectedType==='CITATION'" class="input">
+      <div v-if="selectedType==='CITATION'" class="input">
         <label>{{ newQuote !== '' ? `« ${newQuote} »` : '' }} à la place de :</label>
         <input v-model="newInsteadOf" type="text" id="create-author" required />
       </div>
