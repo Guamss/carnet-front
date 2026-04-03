@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import { authService } from '../api/axios.ts'
 import { jwtDecode } from 'jwt-decode'
 
-const token = ref(localStorage.getItem('token'))
+export const token = ref(localStorage.getItem('token'))
 
 export function useAuth() {
   async function login(credentials: object) {

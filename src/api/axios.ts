@@ -2,6 +2,7 @@ import type { Quote } from '@/models/carnet'
 import { type User } from '@/models/user'
 import axios, { AxiosError, type AxiosResponse } from 'axios'
 import { sendToast } from '@/composables/utils'
+import { token } from '@/composables/useAuth'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -19,9 +20,19 @@ export function handleApiError(error: unknown): never {
 }
 
 export const quoteService = {
-  async createQuote(text: string, said_by: string, label: string, instead_of: string, type: string) {
+  async createQuote(
+    text: string,
+    said_by: string,
+    label: string,
+    instead_of: string,
+    type: string,
+  ) {
     return api
-      .post(`/quotes`, { text: text, said_by: said_by, label: label, instead_of: instead_of, type: type })
+      .post(
+        `/quotes`,
+        { text: text, said_by: said_by, label: label, instead_of: instead_of, type: type },
+        { headers: { Authorization: `Bearer ${token.value}` } },
+      )
       .then((res) => {
         return res.data as Quote
       })
@@ -70,7 +81,7 @@ export const authService = {
     return api
       .put(
         '/users',
-        { "new_pwd": newPwd, "confirm_new_pwd": confirmNewPwd },
+        { new_pwd: newPwd, confirm_new_pwd: confirmNewPwd },
         { headers: { Authorization: `Bearer ${token}` } },
       )
       .then((res) => {
